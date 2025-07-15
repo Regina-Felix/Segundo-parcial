@@ -1,0 +1,38 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+
+# Configuración inicial
+warnings.filterwarnings('ignore')
+plt.style.use('seaborn')
+sns.set_palette("husl")
+
+def main():
+    try:
+        # Cargar datos
+        print("⏳ Cargando datos...")
+        df = pd.read_csv('flights.csv')
+        print("✅ Datos cargados correctamente")
+        
+        # Limpieza de datos
+        print("\n🧹 Limpiando datos...")
+        df = df.dropna()
+        df = df[(df['DepDelay'] <= 300) & (df['ArrDelay'] <= 300)]
+        print(f"📊 Datos finales: {df.shape[0]} filas")
+        
+        # Análisis básico
+        print("\n📈 Análisis básico:")
+        print(df[['DepDelay', 'ArrDelay']].describe())
+        
+        # Visualización
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(x='DepDelay', y='ArrDelay', data=df, alpha=0.5)
+        plt.title('Relación entre Retrasos de Salida y Llegada')
+        plt.show()
+        
+    except Exception as e:
+        print(f"❌ Error: {str(e)}")
+
+if __name__ == "__main__":
+    main()
